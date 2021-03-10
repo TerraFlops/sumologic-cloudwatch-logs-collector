@@ -9,11 +9,6 @@ variable "log_stream_prefix" {
   default = null
 }
 
-variable "retention_in_days" {
-  type = number
-  default = 0
-}
-
 variable "category" {
   type = string
   description = "Sumo Logic source category name"

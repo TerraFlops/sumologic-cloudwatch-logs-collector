@@ -5,7 +5,6 @@ data "aws_region" "default" {}
 # Retrieve the log group ARN
 data "aws_cloudwatch_log_group" "source" {
   name = var.log_group_name
-  retention_in_days = 0
 }
 
 locals {
