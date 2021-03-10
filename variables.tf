@@ -9,7 +9,18 @@ variable "log_stream_prefix" {
   default = null
 }
 
+variable "retention_in_days" {
+  type = number
+  default = 0
+}
+
 variable "category" {
   type = string
   description = "Sumo Logic source category name"
+}
+
+variable "exclude_filters" {
+  type = set(string)
+  description = "Set of regex filters used to exclude messages from being sent to Sumo Logic"
+  default = []
 }

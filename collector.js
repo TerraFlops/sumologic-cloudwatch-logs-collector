@@ -1,13 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                        CloudWatch Logs to SumoLogic                                             //
-//               https://github.com/SumoLogic/sumologic-aws-lambda/tree/master/cloudwatchlogs                      //
-//                                                                                                                 //
-//        YOU MUST CREATE A SUMO LOGIC ENDPOINT CALLED SUMO_ENDPOINT AND PASTE IN ENVIRONMENTAL VARIABLES BELOW    //
-//            https://help.sumologic.com/Send_Data/Sources/02Sources_for_Hosted_Collectors/HTTP_Source             //
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// SumoLogic Endpoint to post logs
-/* eslint-disable */
 var SumoURL = process.env.SUMO_ENDPOINT;
 
 // The following parameters override the sourceCategoryOverride, sourceHostOverride and sourceNameOverride metadata fields within SumoLogic.
@@ -24,8 +15,8 @@ var includeLogInfo = true;  // default is false
 
 // Regex to filter by logStream name prefixes
 var logStreamPrefixRegex = process.env.LOG_STREAM_PREFIX
-                            ? new RegExp('^(' + escapeRegExp(process.env.LOG_STREAM_PREFIX).replace(/,/g, '|')  + ')', 'i')
-                            : '';
+    ? new RegExp('^(' + escapeRegExp(process.env.LOG_STREAM_PREFIX).replace(/,/g, '|') + ')', 'i')
+    : '';
 
 // Regex used to detect logs coming from lambda functions.
 // The regex will parse out the requestID and strip the timestamp
@@ -40,7 +31,7 @@ var zlib = require('zlib');
 var url = require('url');
 
 function escapeRegExp(string) {
-  return string.replace(/[|\\{}()[\]^$+*?.-]/g, '\\$&');
+    return string.replace(/[|\\{}()[\]^$+*?.-]/g, '\\$&');
 }
 
 function sumoMetaKey(awslogsData, message) {
@@ -120,7 +111,8 @@ function postToSumo(callback, messages) {
 
         var req = https.request(options, function (res) {
             res.setEncoding('utf8');
-            res.on('data', function (chunk) {});
+            res.on('data', function (chunk) {
+            });
             res.on('end', function () {
                 if (res.statusCode == 200) {
                     messagesSent++;
@@ -167,7 +159,7 @@ exports.handler = function (event, context, callback) {
         if (awslogsData.messageType === 'CONTROL_MESSAGE') {
             console.log('Control message');
             callback(null, 'Success');
-        } else if(logStreamPrefixRegex && !awslogsData.logStream.match(logStreamPrefixRegex)){
+        } else if (logStreamPrefixRegex && !awslogsData.logStream.match(logStreamPrefixRegex)) {
             console.log('Skipping Non-Applicable Log Stream');
             return callback(null, 'Success');
         }
