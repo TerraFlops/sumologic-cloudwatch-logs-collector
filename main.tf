@@ -134,7 +134,7 @@ resource "aws_kms_key" "collector" {
             "Resource": "*",
             "Condition": {
                 "ArnEquals": {
-                    "kms:EncryptionContext:aws:logs:arn": "arn:aws:logs:${data.aws_region.default.name}:${data.aws_caller_identity.default.account_id}:log-group:PaymentGatewayCloudtrail"
+                    "kms:EncryptionContext:aws:logs:arn": "arn:aws:logs:${data.aws_region.default.name}:${data.aws_caller_identity.default.account_id}:log-group:/aws/lambda/SumoLogicHttpCollector${local.log_group_name_camel}${local.log_prefix_camel}"
                 }
             }
         }
