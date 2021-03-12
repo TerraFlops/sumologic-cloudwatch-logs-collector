@@ -145,6 +145,9 @@ EOF
 
 # Create Lambda function to send CloudWatch logs to the Sumo Logic HTTP collector
 resource "aws_lambda_function" "collector" {
+  depends_on = [
+    aws_cloudwatch_log_group.collector
+  ]
   function_name = "SumoLogicHttpCollector${local.log_group_name_camel}${local.log_prefix_camel}"
   description = "Sends CloudWatch Logs to Sumo Logic HTTP Collector"
   runtime = "nodejs12.x"
