@@ -94,7 +94,7 @@ data "archive_file" "collector" {
 
 resource "aws_cloudwatch_log_group" "collector" {
   name = "/aws/lambda/SumoLogicHttpCollector${local.log_group_name_camel}${local.log_prefix_camel}"
-  retention_in_days = 0
+  retention_in_days = 3653
   kms_key_id = aws_kms_key.collector.arn
 }
 
