@@ -153,7 +153,7 @@ resource "aws_lambda_function" "collector" {
   runtime = "nodejs12.x"
   handler = "collector.handler"
   role = aws_iam_role.collector.arn
-  filename = data.archive_file.collector.output_path
+  filename = "./lambda/collector.js"
   source_code_hash = local.lambda_hash
   timeout = 900
   environment {
