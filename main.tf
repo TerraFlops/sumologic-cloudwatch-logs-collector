@@ -11,9 +11,7 @@ locals {
   log_group_name_camel = regex("[0-9A-Za-z]+", join("", [ for element in split("/",replace(replace(var.log_group_name, "_", "/"), "-", "/")): title(element) ]))
   log_prefix_camel = var.log_stream_prefix == null ? "" : regex("[0-9A-Za-z]+", join("", [ for element in split("/",replace(replace(var.log_stream_prefix, "_", "/"), "-", "/")): title(element) ]))
   log_stream_prefix = var.log_stream_prefix == null ? "" : var.log_stream_prefix
-  lambda_filename = "${path.module}/lambda/collector.js"
-  lambda_hash = filesha512(local.lambda_filename)
-  lambda_archive_filename = "/tmp/lambda-collector-js-${local.lambda_hash}.zip"
+  lambda_filename = "${path.module}/lambda/collector.zip"
 }
 
 # Create Sumo Logic collector
@@ -147,7 +145,6 @@ resource "aws_lambda_function" "collector" {
   handler = "collector.handler"
   role = aws_iam_role.collector.arn
   filename = local.lambda_filename
-  source_code_hash = local.lambda_hash
   timeout = 900
   environment {
     variables = {
