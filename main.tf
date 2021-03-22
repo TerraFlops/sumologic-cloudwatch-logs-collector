@@ -85,13 +85,6 @@ resource "aws_lambda_permission" "collector" {
   source_arn = data.aws_cloudwatch_log_group.source.arn
 }
 
-# Compress the Lambda function into a ZIP file
-data "archive_file" "collector" {
-  type = "zip"
-  source_file = local.lambda_filename
-  output_path = local.lambda_archive_filename
-}
-
 resource "aws_cloudwatch_log_group" "collector" {
   name = "/aws/lambda/SumoLogicHttpCollector${local.log_group_name_camel}${local.log_prefix_camel}"
   retention_in_days = 3653
@@ -146,15 +139,14 @@ EOF
 # Create Lambda function to send CloudWatch logs to the Sumo Logic HTTP collector
 resource "aws_lambda_function" "collector" {
   depends_on = [
-    aws_cloudwatch_log_group.collector,
-    data.archive_file.collector
+    aws_cloudwatch_log_group.collector
   ]
   function_name = "SumoLogicHttpCollector${local.log_group_name_camel}${local.log_prefix_camel}"
   description = "Sends CloudWatch Logs to Sumo Logic HTTP Collector"
   runtime = "nodejs12.x"
   handler = "collector.handler"
   role = aws_iam_role.collector.arn
-  filename = local.lambda_archive_filename
+  filename = local.lambda_filename
   source_code_hash = local.lambda_hash
   timeout = 900
   environment {
